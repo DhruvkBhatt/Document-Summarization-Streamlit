@@ -23,8 +23,8 @@ for root, dirs, files in os.walk(start_path):
 
 print(checkpoint_path)
 
-tokenizer = T5Tokenizer.from_pretrained(checkpoint_path)
-base_model = T5ForConditionalGeneration.from_pretrained(checkpoint_path, device_map='auto', torch_dtype=torch.float32)
+tokenizer = T5Tokenizer.from_pretrained(checkpoint)
+base_model = T5ForConditionalGeneration.from_pretrained(checkpoint, device_map='auto', torch_dtype=torch.float32)
 
 #file loader and preprocessing
 def file_preprocessing(file):
