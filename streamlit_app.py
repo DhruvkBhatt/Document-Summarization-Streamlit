@@ -6,11 +6,22 @@ from transformers import T5Tokenizer, T5ForConditionalGeneration
 from transformers import pipeline
 import torch
 import base64
+import os
 
 #model and tokenizer loading
 checkpoint = "LaMini-Flan-T5-248M"
-tokenizer = T5Tokenizer.from_pretrained(checkpoint)
-base_model = T5ForConditionalGeneration.from_pretrained(checkpoint, device_map='auto', torch_dtype=torch.float32)
+checkpoint_path = os.path.join(os.getcwd(),checkpoint)
+# Get the current working directory
+start_path = os.getcwd()
+
+# Walk through the directory tree
+for root, dirs, files in os.walk(start_path):
+    # Print all directories and subdirectories
+    for dir in dirs:
+        print(os.path.join(root, dir))
+
+tokenizer = T5Tokenizer.from_pretrained(checkpoint_path)
+base_model = T5ForConditionalGeneration.from_pretrained(checkpoint_path, device_map='auto', torch_dtype=torch.float32)
 
 #file loader and preprocessing
 def file_preprocessing(file):
