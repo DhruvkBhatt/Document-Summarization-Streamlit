@@ -17,8 +17,11 @@ start_path = os.getcwd()
 # Walk through the directory tree
 for root, dirs, files in os.walk(start_path):
     # Print all directories and subdirectories
+    print(root)
     for dir in dirs:
         print(os.path.join(root, dir))
+
+print(checkpoint_path)
 
 tokenizer = T5Tokenizer.from_pretrained(checkpoint_path)
 base_model = T5ForConditionalGeneration.from_pretrained(checkpoint_path, device_map='auto', torch_dtype=torch.float32)
