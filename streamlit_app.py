@@ -132,6 +132,8 @@ def main():
         if st.button("Summarize"):
             col1, col2 = st.columns(2)
             filepath = "data/"+uploaded_file.name
+            if not os.path.exists("data"):
+                os.makedirs("data")
             with open(filepath, "wb") as temp_file:
                 temp_file.write(uploaded_file.read())
             with col1:
