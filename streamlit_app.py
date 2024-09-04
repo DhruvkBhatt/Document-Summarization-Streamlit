@@ -14,16 +14,7 @@ checkpoint = "LaMini-Flan-T5-248M"
 checkpoint_path = os.path.join(os.getcwd(),checkpoint)
 # Get the current working directory
 start_path = os.getcwd()
-
-# Walk through the directory tree
-for root, dirs, files in os.walk(start_path):
-    # Print all directories and subdirectories
-    print(root)
-    for dir in dirs:
-        print(os.path.join(root, dir))
-
-print(checkpoint_path)
-
+os.environ['STREAMLIT_SERVER_MAX_UPLOAD_SIZE'] = '2'
 tokenizer = T5Tokenizer.from_pretrained(checkpoint)
 base_model = T5ForConditionalGeneration.from_pretrained(checkpoint, device_map='auto', torch_dtype=torch.float32)
 
@@ -35,7 +26,7 @@ def file_preprocessing(file):
     texts = text_splitter.split_documents(pages)
     final_texts = ""
     for text in texts:
-        print(text)
+        # print(text)
         final_texts = final_texts + text.page_content
     return final_texts
 
@@ -81,9 +72,13 @@ def main():
     max_length = st.sidebar.slider("Max Summary Length", min_value=50, max_value=1000, value=200)
     min_length = st.sidebar.slider("Min Summary Length", min_value=50, max_value=max_length-1, value=50)
 
-    uploaded_file = st.file_uploader("Upload your PDF file", type=['pdf'])
 
+    uploaded_file = st.file_uploader("Upload your PDF file", type=['pdf'])  # Restricting the maximum upload size to 10MB
     if uploaded_file is not None:
+        file_size = uploaded_file.size
+        if file_size > 2*1024*1024:
+            st.error("File size exceeds 2MB")
+            return
         
         if st.button("Summarize"):
             col1, col2 = st.columns(2)
